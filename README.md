@@ -1,6 +1,6 @@
 Learn node.
 
-### Node Server
+# Node Server
 
 To create a basic node server which listens to a port use the following
 
@@ -14,7 +14,7 @@ const server = http.createServer(( req, res) => {
 server.listen(3000);
 ```
 
-### Import in node
+# Import in node
 
 To export objects from a file use the following
 
@@ -34,7 +34,7 @@ const ans = calculator.add(5, 20);
 
 ```
 
-### Server In Express
+# Server In Express
 
 To create a server in express use following:
 
@@ -46,7 +46,7 @@ app.listen(5000, () => {
 });
 ```
 
-# GET, POST, PATCH, DELETE
+## GET, POST, PATCH, DELETE
 
 Send response to client.
 
@@ -68,6 +68,6 @@ app.get("/", (req, res) => {
 app.get("/", myController.home);
 ```
 
-### Important Concepts
+# Important Concepts
 
 1. Node.js, similar to javascript, executes code synchronously, line by line.
