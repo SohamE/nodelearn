@@ -71,3 +71,15 @@ app.get("/", myController.home);
 # Important Concepts
 
 1. Node.js, similar to javascript, executes code synchronously, line by line.
+2. Format for REST api json response
+
+```
+{
+    status: 'success',
+    results: tours.length,
+    data: {
+      tours
+    }
+}
+```
+status can be success/ failed (error at client)/ error ( error at server).

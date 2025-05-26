@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "name": "The Forest Hiker",
+    "duration": 5,
+    "groupSize": 15,
+    "difficulty": "medium",
+    "rating": 4.7,
+    "description": "Explore the dense forest trails and encounter stunning wildlife and breathtaking views.",
+    "startDates": ["2025-06-01", "2025-07-15", "2025-08-10"]
+  },
+  {
+    "id": 2,
+    "name": "The Sea Explorer",
+    "duration": 7,
+    "groupSize": 10,
+    "difficulty": "easy",
+    "rating": 4.9,
+    "description": "Sail along pristine coastlines and dive into the world of marine wonders.",
+    "startDates": ["2025-06-10", "2025-07-20", "2025-09-01"]
+  },
+  {
+    "id": 3,
+    "name": "The Snow Adventurer",
+    "duration": 10,
+    "groupSize": 8,
+    "difficulty": "hard",
+    "rating": 4.6,
+    "description": "Trek through icy landscapes and experience the thrill of a winter wonderland.",
+    "startDates": ["2025-12-01", "2026-01-10", "2026-02-15"]
+  },
+  {
+    "id": 4,
+    "name": "The City Wanderer",
+    "duration": 3,
+    "groupSize": 20,
+    "difficulty": "easy",
+    "rating": 4.3,
+    "description": "Discover the hidden gems of the city, from local markets to historical landmarks.",
+    "startDates": ["2025-05-30", "2025-06-15", "2025-07-05"]
+  },
+  {
+    "id": 5,
+    "name": "The Mountain Climber",
+    "duration": 12,
+    "groupSize": 6,
+    "difficulty": "hard",
+    "rating": 4.8,
+    "description": "Conquer rugged peaks and embrace the challenge of high-altitude adventures.",
+    "startDates": ["2025-07-01", "2025-08-15", "2025-09-10"]
+  }
+]
