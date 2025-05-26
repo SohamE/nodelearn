@@ -1,6 +1,6 @@
 Learn node.
 
-*** Node Server ***
+### Node Server ###
 
 To create a basic node server which listens to a port use the following
 ```
