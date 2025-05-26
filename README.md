@@ -12,3 +12,23 @@ const server = http.createServer(( req, res) => {
 });
 server.listen(3000);
 ```
+
+### Import in node ###
+
+To export objects from a file use the following
+
+```
+const add = (a, b) =>  a + b;
+
+module.exports = {
+    add,
+}
+```
+
+To import the exported object use
+
+```
+const calculator = require('./basicfunction');
+const ans = calculator.add(5, 20);
+
+```
