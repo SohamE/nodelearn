@@ -6,6 +6,18 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
+// Custom middleware
+app.use((req, res, next) => {
+  console.log('Hello from the middleware');
+  // Without the following the request - response cycle stops.
+  next();
+})
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+})
+
 // GET Method
 // app.get("/api/v1/tours", myController.getAllTours);
 // app.get("/api/v1/tours/:id", myController.getTourById);

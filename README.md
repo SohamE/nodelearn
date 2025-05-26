@@ -68,6 +68,63 @@ app.get("/", (req, res) => {
 app.get("/", myController.home);
 ```
 
+# Middleware
+
+## Request Response cycle
+
+Request comes in, it passes through all the middleware stacks and then sends response.
+
+```
+        ___________________pipeline _________________
+        |                                           |
+Request -> middleware -> middleware -> middleware -> Response
+            next()        next()        res.send()
+```
+
+The middleware stack follows the sequence the middleware is declared (synchronously, line by line)
+
+To use middleware we use the _use_ method. _express.json()_ returns a function and that adds to the middleware stack.
+
+```
+app.use(express.json())
+```
+
+## Custom middleware
+
+```
+app.use((req, res, next) => {
+  console.log('Hello from the middleware');
+  next();
+})
+```
+
+Every middleware function has access to request, response and next method. After adding functionality in the function we have to call the next() method to pass continue the request-response cycle.
+The above middleware doesnot specify a route, hence it will work for all routes.
+Where the middleware is defined, i.e. the order is important and it decides on which route the middleware works.
+
+In the following case as the middleware is defined after Route 1, the middleware will not work for Route 1, because the cycle has ended when the controller method calls the res.send(). But it will work for Route 2.
+
+```
+// Route 1
+app
+  .route("/api/v1/tours")
+  .get(myController.getAllTours)
+  .post(myController.createTour);
+
+app.use((req, res, next) => {
+  console.log('Hello from the middleware');
+  // Without the following the request - response cycle stops.
+  next();
+})
+
+// Route 2
+app
+  .route("/api/v1/tours/:id")
+  .get(myController.getTourById)
+  .patch(myController.updateTour)
+  .delete(myController.deleteTour);
+```
+
 # Important Concepts
 
 1. Node.js, similar to javascript, executes code synchronously, line by line.
@@ -82,4 +139,5 @@ app.get("/", myController.home);
     }
 }
 ```
+
 status can be success/ fail (error at client)/ error ( error at server).
