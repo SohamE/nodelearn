@@ -82,4 +82,4 @@ app.get("/", myController.home);
     }
 }
 ```
-status can be success/ failed (error at client)/ error ( error at server).
+status can be success/ fail (error at client)/ error ( error at server).
