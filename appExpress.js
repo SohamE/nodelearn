@@ -15,6 +15,7 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
+// GET Method
 app.get("/api/v1/tours", (req, res) => {
   res.status(200).json({
     status: "success",
@@ -43,6 +44,7 @@ app.get("/api/v1/tours/:id", (req, res) => {
   }
 });
 
+// POST Method
 app.post("/api/v1/tours", (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
   const newTour = { id: newId, ...req.body };
@@ -60,6 +62,16 @@ app.post("/api/v1/tours", (req, res) => {
       });
     }
   );
+});
+
+// Patch Method
+app.patch("/api/v1/tours/:id", (req, res) => {
+
+});
+
+// Delete Method
+app.delete("/api/v1/tours/:id", (req, res) => {
+
 });
 
 app.listen(process.env.PORT, () => {
