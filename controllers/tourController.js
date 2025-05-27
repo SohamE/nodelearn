@@ -4,6 +4,17 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
+const checkBody = (req, res, next) => {
+  const body = req.body;
+  if (body.name === null || body.name == undefined) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Name property is required",
+    })
+  }
+  next();
+}
+
 const getAllTours = (req, res) => {
   res.status(200).json({
     status: "success",
@@ -60,4 +71,5 @@ module.exports = {
   createTour,
   updateTour,
   deleteTour,
+  checkBody
 };
