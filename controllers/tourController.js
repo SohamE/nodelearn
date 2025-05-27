@@ -1,12 +1,7 @@
 const fs = require("fs");
 
-const home = (req, res) => {
-  res.status(200).send("Home");
-};
-
-
 const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
+  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
 const getAllTours = (req, res) => {
@@ -17,7 +12,7 @@ const getAllTours = (req, res) => {
       tours,
     },
   });
-}
+};
 
 const getTourById = (req, res) => {
   console.log(req.params);
@@ -35,7 +30,7 @@ const getTourById = (req, res) => {
       },
     });
   }
-}
+};
 
 const createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
@@ -54,17 +49,15 @@ const createTour = (req, res) => {
       });
     }
   );
-}
+};
 
 const updateTour = (req, res) => {};
 const deleteTour = (req, res) => {};
 
-
 module.exports = {
-  home,
   getAllTours,
   getTourById,
   createTour,
   updateTour,
-  deleteTour
+  deleteTour,
 };

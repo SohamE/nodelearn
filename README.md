@@ -68,6 +68,22 @@ app.get("/", (req, res) => {
 app.get("/", myController.home);
 ```
 
+## Routes
+
+Both works same
+
+```
+app.get("/api/v1/tours", myController.getAllTours);
+app.get("/api/v1/tours/:id", myController.getTourById);
+```
+
+```
+app
+  .route("/")
+  .get(tourController.getAllTours)
+  .post(tourController.createTour);
+```
+
 # Middleware
 
 ## Request Response cycle
@@ -124,6 +140,23 @@ app
   .patch(myController.updateTour)
   .delete(myController.deleteTour);
 ```
+
+# Mounting routes
+
+Instead of defining the routes directly on the _app_ object, we can mount routes, this help use creating seperate routers and decouple the application, helps use spread route across files. Once Routes are created we can use middleware to link it to the _app_ object. We can have the router in seperate file and export.
+
+```
+const tourRouter = express.Router();
+
+tourRouter
+  .route("/")
+  .get(myController.getAllTours)
+  .post(myController.createTour);
+
+// middleware
+app.use('/api/v1/tours', tourRouter);
+```
+
 
 # Important Concepts
 

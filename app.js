@@ -1,10 +1,25 @@
-const calculator = require('./basicfunction');
+const dotenv = require("dotenv");
+const tourRouter = require("./routes/tourRoutes");
+const userRouter = require("./routes/userRoutes");
+dotenv.config();
 
-const http = require('http');
-const server = http.createServer(( req, res) => {
-    const ans = calculator.add(5, 20);
-    console.log(`Hello ${ans}`);
-    res.write(`Hello world ${ans}`);
-    res.end();
+const express = require("express");
+const app = express();
+app.use(express.json());
+
+// Custom middleware
+app.use((req, res, next) => {
+  console.log("Hello from the middleware");
+  // Without the following the request - response cycle stops.
+  next();
 });
-server.listen(3000);
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
+
+app.use("/api/v1/tours", tourRouter);
+app.use("/api/v1/users", userRouter);
+
+module.exports = app;
