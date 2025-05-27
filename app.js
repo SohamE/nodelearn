@@ -6,6 +6,8 @@ dotenv.config();
 const express = require("express");
 const app = express();
 app.use(express.json());
+// to server static files to client
+app.use(express.static(`${__dirname}/public`));
 
 // Custom middleware
 app.use((req, res, next) => {

@@ -149,6 +149,13 @@ middleware chaining can be done like the following. tourController.checkBody is 
 router.post(tourController.checkBody, tourController.createTour);
 ```
 
+## Serve static files
+
+Use the following middleware to server static files. To access it in browser use _/filename_
+```
+app.use(express.static(`${__dirname}/public`));
+```
+
 # Mounting routes
 
 Instead of defining the routes directly on the _app_ object, we can mount routes, this help use creating seperate routers and decouple the application, helps use spread route across files. Once Routes are created we can use middleware to link it to the _app_ object. We can have the router in seperate file and export.
