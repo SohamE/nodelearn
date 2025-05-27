@@ -8,15 +8,15 @@ app.use(express.json());
 
 // Custom middleware
 app.use((req, res, next) => {
-  console.log('Hello from the middleware');
+  console.log("Hello from the middleware");
   // Without the following the request - response cycle stops.
   next();
-})
+});
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
-})
+});
 
 // GET Method
 // app.get("/api/v1/tours", myController.getAllTours);
@@ -31,6 +31,7 @@ app.use((req, res, next) => {
 // Delete Method
 // app.delete("/api/v1/tours/:id", myController.deleteTour);
 
+// Tours routes
 app
   .route("/api/v1/tours")
   .get(myController.getAllTours)
@@ -41,6 +42,18 @@ app
   .get(myController.getTourById)
   .patch(myController.updateTour)
   .delete(myController.deleteTour);
+
+// Users route
+app
+  .route("/api/v1/users")
+  .get(myController.getAllUsers)
+  .post(myController.createUser);
+
+app
+  .route("/api/v1/users/:id")
+  .get(myController.getUserById)
+  .patch(myController.updateUser)
+  .delete(myController.deleteUser);
 
 app.listen(process.env.PORT, () => {
   console.log(`App running on port ${process.env.PORT}`);
