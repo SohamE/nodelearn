@@ -1,65 +1,59 @@
-const fs = require("fs");
+const Tour = require("../models/tourModel");
 
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-);
+const getAllTours = async (req, res) => {
+  try {
+    const tours = await Tour.find();
 
-const checkBody = (req, res, next) => {
-  const body = req.body;
-  if (body.name === null || body.name == undefined) {
-    return res.status(400).json({
+    res.status(200).json({
+      status: "success",
+      results: tours.length,
+      data: {
+        tours,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
       status: "fail",
-      message: "Name property is required",
-    })
+      message: err,
+    });
   }
-  next();
-}
-
-const getAllTours = (req, res) => {
-  res.status(200).json({
-    status: "success",
-    results: tours.length,
-    data: {
-      tours,
-    },
-  });
 };
 
-const getTourById = (req, res) => {
-  console.log(req.params);
-  const tour = tours.filter((tour) => tour.id == req.params.id);
-  if (tour.length == 0) {
-    res.status(404).json({
-      status: "fail",
-      message: "Invalid Id",
-    });
-  } else {
+const getTourById = async (req, res) => {
+  try {
+    const tour = await Tour.findOne({ _id: req.params.id });
     res.status(200).json({
       status: "success",
       data: {
         tour,
       },
     });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
   }
 };
 
-const createTour = (req, res) => {
-  const newId = tours[tours.length - 1].id + 1;
-  const newTour = { id: newId, ...req.body };
-  tours.push(newTour);
+const createTour = async (req, res) => {
+  try {
+    const newTour = await Tour.create({
+      ...req.body,
+    });
 
-  fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
-    JSON.stringify(tours),
-    (err) => {
-      res.status(201).json({
-        status: "success",
-        data: {
-          tour: newTour,
-        },
-      });
-    }
-  );
+    res.status(201).json({
+      status: "success",
+      data: {
+        tour: newTour,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
 };
 
 const updateTour = (req, res) => {};
@@ -71,5 +65,4 @@ module.exports = {
   createTour,
   updateTour,
   deleteTour,
-  checkBody
 };

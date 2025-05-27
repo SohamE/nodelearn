@@ -152,6 +152,7 @@ router.post(tourController.checkBody, tourController.createTour);
 ## Serve static files
 
 Use the following middleware to server static files. To access it in browser use _/filename_
+
 ```
 app.use(express.static(`${__dirname}/public`));
 ```
@@ -172,6 +173,60 @@ tourRouter
 app.use('/api/v1/tours', tourRouter);
 ```
 
+# Mongoose
+
+Mongoose is object data model, which helps node application connect to mongodb and it provides multiple middlewares to easy our mongodb interactions.
+
+## Schema & Model
+
+Every data model in mongodb must declare a schema which will follow during document creation. It is done as following.
+
+```
+const tourSchema = mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, "A tour must have a name"],
+    unique: true,
+  },
+  rating: {
+    type: Number,
+    default: 3.5,
+  },
+  price: {
+    type: Number,
+    required: [true, "A tour must have a price"],
+  },
+});
+```
+
+Once schema is defined we have to create the model based on it. Based on the model name the Collection will be determined. For _Tour_ documents collection name will be _Tours_
+
+```
+const Tour = mongoose.model("Tour", tourSchema);
+```
+
+## Create Document
+
+Following can be used to create document
+
+```
+const newTour = new Tour({
+  ...req.body
+});
+newTour.save();
+```
+
+OR
+
+```
+const newTour = await Tour.create({
+  ...req.body,
+});
+```
+
+Both are asynchronous functions and must be handled with promises/async&await
+To handle errors wrap in try&catch block.
+While creating a new document if we add properties which were not defined in the schema, it will ignore them and not store in document.
 
 # Important Concepts
 
@@ -189,3 +244,6 @@ app.use('/api/v1/tours', tourRouter);
 ```
 
 status can be success/ fail (error at client)/ error ( error at server).
+
+3. Application Logic - code concerned about application implementation, not underlying business problem. In express, managing req and response. It is technical part, bridge between model and view.
+   Business Logic - Business problem we set out to solve. What the application will do to achieve the business needs.
