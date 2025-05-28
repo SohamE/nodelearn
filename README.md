@@ -228,6 +228,30 @@ Both are asynchronous functions and must be handled with promises/async&await
 To handle errors wrap in try&catch block.
 While creating a new document if we add properties which were not defined in the schema, it will ignore them and not store in document.
 
+## Virtual fields
+
+virtual fields are fields which are derived from actual fields, but are not stored in database, rather computed when requested. These fields cannot be used in queries like in _find_ methods.
+
+```
+tourSchema.virtual("durationWeeks").get(function () {
+  return this.duration / 7;
+});
+```
+To make virtual fields show up as json/objects use
+
+```
+tourSchema = mongoose.schema({...}, 
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+)
+```
+
+## Mongoose Middleware
+
+Mongoose middleware allows us to hook into events before and after.
+
 # Important Concepts
 
 1. Node.js, similar to javascript, executes code synchronously, line by line.
