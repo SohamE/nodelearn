@@ -56,8 +56,46 @@ const createTour = async (req, res) => {
   }
 };
 
-const updateTour = (req, res) => {};
-const deleteTour = (req, res) => {};
+const updateTour = async (req, res) => {
+  try {
+    const updatedTour = await Tour.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: { ...req.body } },
+      {
+        returnDocument: "after",
+      }
+    );
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        tour: updatedTour,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
+const deleteTour = async (req, res) => {
+  try {
+    const deletedTour = await Tour.findOneAndDelete({ _id: req.params.id });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        tour: deletedTour,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
 
 module.exports = {
   getAllTours,
