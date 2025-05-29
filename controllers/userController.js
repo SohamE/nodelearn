@@ -1,3 +1,23 @@
+const User = require("../models/userModel");
+
+const userSignup = async (req, res) => {
+  try {
+    const user = await User.create({ ...req.body });
+    res.status(201).json({
+      status: "success",
+      data: {
+        user,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      status: "error",
+      message: err,
+    });
+  }
+};
+
 const getAllUsers = (req, res) => {
   res.status(500).json({
     status: "error",
@@ -38,4 +58,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  userSignup,
 };

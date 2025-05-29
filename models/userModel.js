@@ -1,0 +1,45 @@
+const mongoose = require("mongoose");
+const validator = require("validator");
+const bcrypt = require("bcryptjs");
+
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, "Please provide your name"],
+    trim: true,
+  },
+  email: {
+    type: String,
+    required: [true, "Please provide your email"],
+    unique: [true, "User with this email ({VALUE}) already exists"],
+    lower: true,
+    validate: [validator.isEmail, "The provided email ({VALUE}) is invalid"],
+  },
+  photo: String,
+  password: {
+    type: String,
+    required: [true, "Please provide a password"],
+    minLength: [8, "Password must be atleast 8 characters long"],
+  },
+  passwordConfirm: {
+    type: String,
+    required: [true, "Please provide a confirm password"],
+    validate: {
+      validator: function (cnfPass) {
+        return cnfPass === this.password;
+      },
+      message: "The confirm password doesnot match the password",
+    },
+  },
+});
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 12);
+  this.passwordConfirm = undefined;
+  next();
+});
+
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;
