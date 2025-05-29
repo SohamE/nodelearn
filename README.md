@@ -205,6 +205,28 @@ Once schema is defined we have to create the model based on it. Based on the mod
 const Tour = mongoose.model("Tour", tourSchema);
 ```
 
+## Schema Validators
+
+There are multiple validators we can use while defining mongoose schema. Even custom validators can be created.
+Custom validators look like following:
+
+```
+priceDiscount: {
+  type: Number,
+  validate: {
+    validator: function (discount) {
+      // this only points to current doc on NEW document creations.
+      return discount < this.price;
+    },
+    message: "Discount price ({VALUE}) should be below regular price",
+  },
+},
+```
+
+We can combine the validator library with custom validators to add sanitization and validation.
+
+Know more at [Mongoose validator](https://mongoosejs.com/docs/validation.html)
+
 ## Create Document
 
 Following can be used to create document

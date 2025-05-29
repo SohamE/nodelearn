@@ -67,6 +67,7 @@ const updateTour = async (req, res) => {
       { $set: { ...req.body } },
       {
         returnDocument: "after",
+        runValidators: true,
       }
     );
 
