@@ -237,10 +237,11 @@ tourSchema.virtual("durationWeeks").get(function () {
   return this.duration / 7;
 });
 ```
+
 To make virtual fields show up as json/objects use
 
 ```
-tourSchema = mongoose.schema({...}, 
+tourSchema = mongoose.schema({...},
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
@@ -248,9 +249,52 @@ tourSchema = mongoose.schema({...},
 )
 ```
 
-## Mongoose Middleware
+## Mongoose Middleware/Hooks
 
-Mongoose middleware allows us to hook into events before and after.
+Mongoose middleware/hook allows us to hook into events before (_pre_) and after (_post_) events like save, find and et.c.
+To know more visit: [Mongoose Middleware](https://mongoosejs.com/docs/middleware.html)
+
+### Document Middleware/Hooks
+
+The following hook will be called when _create/save_ event is triggered but not on _insertMany_, _findOneAndUpdate_, et.c event.
+We can use this hook to derive new fields and save in the document. Given we have to define the field in the schema.
+this -> will refer to the document we are saving.
+
+```
+tourSchema.pre("save", function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+```
+
+### Query Middleware/Hooks
+
+this -> refer to the current query.
+The following query will be added before every _find_ event, but not for _findOne_.
+
+```
+tourSchema.pre("find", function (next) {
+  this.find({ secretTour: { $ne: true } });
+  next();
+});
+```
+
+To trigger the hook for all _find_ events, use regex.
+
+```
+tourSchema.pre(/^find/, function (next) { .... });
+```
+
+### Aggregate Middleware/Hooks
+
+```
+tourSchema.pre("aggregate", function (next) {
+  this.pipeline().unshift({
+    $match: { secretTour: { $ne: true } },
+  });
+  next();
+});
+```
 
 # Important Concepts
 

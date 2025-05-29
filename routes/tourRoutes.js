@@ -15,6 +15,8 @@ tourRouter
   .get(tourController.getAllTours)
   .post(tourController.createTour);
 
+tourRouter.route("/tour-stats").get(tourController.getTourStats);
+
 tourRouter
   .route("/:id")
   .get(tourController.getTourById)

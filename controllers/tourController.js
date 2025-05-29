@@ -3,10 +3,10 @@ const Tour = require("../models/tourModel");
 const getAllTours = async (req, res) => {
   try {
     const queryObject = { ...req.query };
-    const excludeFields = ['page', 'sort', 'limit', 'fields'];
-    excludeFields.forEach(el => delete queryObject[el]);
+    const excludeFields = ["page", "sort", "limit", "fields"];
+    excludeFields.forEach((el) => delete queryObject[el]);
     console.log(req.query);
-    const tours = await Tour.find({ ...req.query});
+    const tours = await Tour.find({ ...req.query });
 
     res.status(200).json({
       status: "success",
@@ -101,10 +101,44 @@ const deleteTour = async (req, res) => {
   }
 };
 
+const getTourStats = async (req, res) => {
+  try {
+    const tourStats = await Tour.aggregate([
+      {
+        $group: {
+          _id: { $toUpper: "$difficulty" },
+          numTours: { $sum: 1 },
+          numRating: { $sum: "$ratingQuantity" },
+          avgRating: { $avg: "$ratingsAverage" },
+          avgPrice: { $avg: "$price" },
+          minPrice: { $min: "$price" },
+          maxPrice: { $max: "$price" },
+        },
+      },
+      {
+        $sort: { numTours: -1 },
+      },
+    ]);
+    console.log(tourStats);
+    res.status(200).json({
+      status: "success",
+      data: {
+        status: tourStats,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
+
 module.exports = {
   getAllTours,
   getTourById,
   createTour,
   updateTour,
   deleteTour,
+  getTourStats,
 };
