@@ -1,28 +1,21 @@
 const User = require("../models/userModel");
 
-const userSignup = async (req, res) => {
+const getAllUsers = async (req, res) => {
   try {
-    const user = await User.create({ ...req.body });
-    res.status(201).json({
+    const users = await User.find({});
+
+    res.status(200).json({
       status: "success",
       data: {
-        user,
+        users,
       },
     });
   } catch (err) {
-    console.log(err);
-    res.status(400).json({
-      status: "error",
+    return res.status(400).json({
+      status: "fail",
       message: err,
     });
   }
-};
-
-const getAllUsers = (req, res) => {
-  res.status(500).json({
-    status: "error",
-    message: "Route not defined",
-  });
 };
 
 const getUserById = (req, res) => {
@@ -58,5 +51,4 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  userSignup,
 };
