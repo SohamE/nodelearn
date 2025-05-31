@@ -357,3 +357,15 @@ Node's callback style is :  ( err, result )
 2. The value what we want that function return for us
 
 ```
+
+5. Types of Relationship
+
+a. One to One -> One movie can have one name.
+b. One to Many -> One movie can have many reviews.
+c. Many to Many -> One actor plays in multiple movie and one movie can have multiple actors.
+
+6. Types of referencing
+
+a. Child referencing -> the parent should have all the child reference as an array.
+b. Parent referencing -> Each child will have a single field referencing to the parent. This can help keeping the parent clean, hence it's better than child referencing.
+c. Two-Way referencing ->

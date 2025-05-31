@@ -20,8 +20,16 @@ tourRouter.route("/tour-stats").get(tourController.getTourStats);
 
 tourRouter
   .route("/:id")
-  .get(tourController.getTourById)
+  .get(
+    authController.protect,
+    authController.restrictTo("admin"),
+    tourController.getTourById
+  )
   .patch(tourController.updateTour)
-  .delete(tourController.deleteTour);
+  .delete(
+    authController.protect,
+    authController.restrictTo("admin"),
+    tourController.deleteTour
+  );
 
 module.exports = tourRouter;

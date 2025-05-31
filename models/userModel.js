@@ -32,6 +32,14 @@ const userSchema = new mongoose.Schema({
       message: "The confirm password doesnot match the password",
     },
   },
+  role: {
+    type: String,
+    enum: {
+      values: ["admin", "lead-guide", "guide", "user"],
+      message: "Please provide a valid user role.",
+    },
+    default: "user",
+  },
 });
 
 userSchema.pre("save", async function (next) {

@@ -90,10 +90,9 @@ const protect = async (req, res, next) => {
       });
     }
     // Check if the user has not changed password while prev token in valid.
-
+    req.user = user;
     next();
   } catch (err) {
-    console.log(err);
     res.status(400).json({
       status: "error",
       message: err,
@@ -101,8 +100,22 @@ const protect = async (req, res, next) => {
   }
 };
 
+const restrictTo = (...roles) => {
+  return (req, res, next) => {
+    const isRestricted = !roles.includes(req.user.role);
+    if (isRestricted) {
+      return res.status(401).json({
+        status: "fail",
+        message: "Authorization code is not present",
+      });
+    }
+    next();
+  };
+};
+
 module.exports = {
   userSignup,
   userLogin,
   protect,
+  restrictTo,
 };
