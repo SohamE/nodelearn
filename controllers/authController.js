@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const { promisify } = require("util");
 
 const userSignup = async (req, res) => {
   try {
@@ -59,6 +59,40 @@ const userLogin = async (req, res) => {
       token,
     });
   } catch (err) {
+    res.status(400).json({
+      status: "error",
+      message: err,
+    });
+  }
+};
+
+const protect = async (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+    // Check if authorization header is present.
+    if (!authorization || !authorization.startsWith("Bearer")) {
+      return res.status(401).json({
+        status: "fail",
+        message: "Authorization code is not present",
+      });
+    }
+
+    // Check if jwt token is valid.
+    const token = authorization.split(" ")[1];
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+    // Check if user exists.
+    const user = await User.findOne({ _id: decoded.id });
+    if (!user) {
+      return res.status(401).json({
+        status: "fail",
+        message: "User does not exists",
+      });
+    }
+    // Check if the user has not changed password while prev token in valid.
+
+    next();
+  } catch (err) {
     console.log(err);
     res.status(400).json({
       status: "error",
@@ -70,4 +104,5 @@ const userLogin = async (req, res) => {
 module.exports = {
   userSignup,
   userLogin,
+  protect,
 };

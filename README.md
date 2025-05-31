@@ -337,3 +337,23 @@ status can be success/ fail (error at client)/ error ( error at server).
 
 3. Application Logic - code concerned about application implementation, not underlying business problem. In express, managing req and response. It is technical part, bridge between model and view.
    Business Logic - Business problem we set out to solve. What the application will do to achieve the business needs.
+
+4. Promisify in js util converts a function to it's promise alternative
+
+```
+The function passed to util.promisify must :
+a. The final parameter of the function passed to promisify must be a callback.
+b. The callback must follow Node’s callback style
+
+Node's callback style is :  ( err, result )
+
+1. the first parameter ( err ) can be :  null, Error Object, String...  or anything we want -> but its purpose is : tell us what is wrong in our function
+
+  - Typically is  "null" <=> does not have any error in our function , everything work correctly
+
+-  And an Error Object <=> something is wrong in our function  <=> in catch(e) block  , we can get message by using  :  e.message
+
+-  And another type is using String -> it tells us what wrong in our function if we dont want to create an Error Object   <=>  in catch block we just  console.log(e) instead of using console.log(e.message)
+2. The value what we want that function return for us
+
+```
