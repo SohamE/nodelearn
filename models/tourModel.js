@@ -93,7 +93,7 @@ const tourSchema = mongoose.Schema(
     guides: [
       {
         type: mongoose.Schema.ObjectId,
-        reference: "User",
+        ref: "User",
       },
     ],
   },
@@ -105,6 +105,13 @@ const tourSchema = mongoose.Schema(
 
 tourSchema.virtual("durationWeeks").get(function () {
   return this.duration / 7;
+});
+
+// Virtual populate.
+tourSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "tour", // Name of the field in review collection.,
+  localField: "_id", // Map the field of current collection.
 });
 
 tourSchema.pre("save", function (next) {

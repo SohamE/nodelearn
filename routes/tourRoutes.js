@@ -3,6 +3,7 @@ const tourRouter = express.Router();
 
 const tourController = require("../controllers/tourController");
 const authController = require("../controllers/authController");
+const reviewController = require("../controllers/reviewController");
 
 // only runs for if param id is present in route.
 // This middleware will not run for any other routers such as userRouter, as it is only specified in tourRouter.
@@ -15,6 +16,10 @@ tourRouter
   .route("/")
   .get(authController.protect, tourController.getAllTours)
   .post(tourController.createTour);
+
+tourRouter
+  .route("/:tourId/reviews")
+  .post(authController.protect, reviewController.createReview);
 
 tourRouter.route("/tour-stats").get(tourController.getTourStats);
 

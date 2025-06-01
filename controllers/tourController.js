@@ -25,7 +25,7 @@ const getAllTours = async (req, res) => {
 
 const getTourById = async (req, res) => {
   try {
-    const tour = await Tour.findOne({ _id: req.params.id });
+    const tour = await Tour.findOne({ _id: req.params.id }).populate("reviews");
     res.status(200).json({
       status: "success",
       data: {

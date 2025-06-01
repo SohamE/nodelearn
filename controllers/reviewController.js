@@ -19,13 +19,15 @@ const getReviews = async (req, res) => {
 
 const createReview = async (req, res) => {
   try {
-    const { review, rating, createdAt, tour } = req.body;
+    const { review, rating } = req.body;
+
+    const { tourId } = req.params;
     const { _id } = req.user;
     const newReview = await Review.create({
       review,
       rating,
-      createdAt,
-      tour,
+      createdAt: Date.now,
+      tour: tourId,
       user: _id,
     });
 

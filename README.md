@@ -347,7 +347,7 @@ guides: [
 
 ### Populate data
 
-When we are adding documents as a reference, while fetching the data we can use _populate_ to show the referenced data.
+When we are adding documents as a reference, while fetching the data we can use _populate_ to show the referenced data. This is expensive as mongoose, in the backend, queries the collection to get the data.
 
 ```
 const tour = await Tour.findOne({ _id: req.params.id }).populate("guides");
@@ -355,6 +355,20 @@ const tour = await Tour.findOne({ _id: req.params.id }).populate("guides");
 const tour = await Tour.findOne({ _id: req.params.id }).populate({
   path: "guides",
   select: "-__v -passwordChangedAt"
+});
+```
+
+### Virtual populate
+
+Virtually populates the parent with childs having parent referencing.
+The following links the _tour_ field of the Reviews Collection data with the _id_ field of Tours Collection data.
+
+```
+// Virtual populate.
+tourSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "tour", // Name of the field in review collection.,
+  localField: "_id", // Map the field of current collection.
 });
 ```
 
