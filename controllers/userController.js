@@ -19,12 +19,7 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-const getUserById = (req, res) => {
-  res.status(500).json({
-    status: "error",
-    message: "Route not defined",
-  });
-};
+const getUserById = factory.getOne(User);
 
 const createUser = (req, res) => {
   res.status(500).json({
@@ -41,10 +36,16 @@ const updateUser = (req, res) => {
 };
 const deleteUser = factory.deleteOne(User);
 
+const getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
   createUser,
   updateUser,
   deleteUser,
+  getMe,
 };

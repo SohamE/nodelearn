@@ -24,22 +24,7 @@ const getAllTours = async (req, res) => {
   }
 };
 
-const getTourById = async (req, res) => {
-  try {
-    const tour = await Tour.findOne({ _id: req.params.id }).populate("reviews");
-    res.status(200).json({
-      status: "success",
-      data: {
-        tour,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err,
-    });
-  }
-};
+const getTourById = factory.getOne(Tour, "reviews");
 
 const createTour = async (req, res) => {
   try {

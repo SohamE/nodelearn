@@ -10,6 +10,13 @@ const authController = require("../controllers/authController");
 userRouter.route("/signup").post(authController.userSignup);
 userRouter.route("/login").post(authController.userLogin);
 
+userRouter.get(
+  "/me",
+  authController.protect,
+  userController.getMe,
+  userController.getUserById
+);
+
 userRouter
   .route("/")
   .get(userController.getAllUsers)
