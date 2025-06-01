@@ -372,6 +372,31 @@ tourSchema.virtual("reviews", {
 });
 ```
 
+# Merge Params
+
+Each route has access to their our route params. To get access to other attached routes we use merge params.
+
+```
+// reviewRoute.js
+
+const reviewRouter = express.Router();
+reviewRouter
+  .route("/:abcId")
+  .get(reviewController.getReviews);
+
+// app.js
+
+app.use("abc/:defId", reviewRouter)
+```
+
+In the above example the getReviews controller handler will not have access to _defId_, it will only have access to _abcId_. To get access to the _defId_ we use mergeParams like.
+
+```
+const reviewRouter = express.Router({
+  mergeParams: true,
+});
+```
+
 # Important Concepts
 
 1. Node.js, similar to javascript, executes code synchronously, line by line.

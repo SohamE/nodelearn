@@ -2,7 +2,8 @@ const Review = require("../models/reviewModel");
 
 const getReviews = async (req, res) => {
   try {
-    const reviews = await Review.find({});
+    const { tourId } = req.params;
+    const reviews = await Review.find({ tour: tourId });
     res.status(200).json({
       status: "success",
       data: {
@@ -26,7 +27,7 @@ const createReview = async (req, res) => {
     const newReview = await Review.create({
       review,
       rating,
-      createdAt: Date.now,
+      createdAt: Date.now(),
       tour: tourId,
       user: _id,
     });
