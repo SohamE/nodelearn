@@ -318,6 +318,46 @@ tourSchema.pre("aggregate", function (next) {
 });
 ```
 
+# Data Modelling
+
+## Embedding
+
+We can embed data using pre hooks, as such. The following will take ids of users as input and embed the user data in the tourSchema.
+
+```
+tourSchema.pre("save", async function (next) {
+  const guidesPromises = this.guides.map(async (id) => await User.findById(id));
+  this.guides = await Promise.add(guidesPromises);
+  next();
+});
+```
+
+## Reference
+
+We can add document references by collection as follows.
+
+```
+guides: [
+  {
+    type: mongoose.Schema.ObjectId,
+    reference: "User",
+  },
+],
+```
+
+### Populate data
+
+When we are adding documents as a reference, while fetching the data we can use _populate_ to show the referenced data.
+
+```
+const tour = await Tour.findOne({ _id: req.params.id }).populate("guides");
+// OR to cherry pick fields
+const tour = await Tour.findOne({ _id: req.params.id }).populate({
+  path: "guides",
+  select: "-__v -passwordChangedAt"
+});
+```
+
 # Important Concepts
 
 1. Node.js, similar to javascript, executes code synchronously, line by line.
