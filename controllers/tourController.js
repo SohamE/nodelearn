@@ -1,4 +1,5 @@
 const Tour = require("../models/tourModel");
+const factory = require("./handlerFactory");
 
 const getAllTours = async (req, res) => {
   try {
@@ -84,23 +85,7 @@ const updateTour = async (req, res) => {
     });
   }
 };
-const deleteTour = async (req, res) => {
-  try {
-    const deletedTour = await Tour.findOneAndDelete({ _id: req.params.id });
-
-    res.status(200).json({
-      status: "success",
-      data: {
-        tour: deletedTour,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err,
-    });
-  }
-};
+const deleteTour = factory.deleteOne(Tour);
 
 const getTourStats = async (req, res) => {
   try {

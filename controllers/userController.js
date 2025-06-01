@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const factory = require("./handlerFactory");
 
 const getAllUsers = async (req, res) => {
   try {
@@ -38,12 +39,7 @@ const updateUser = (req, res) => {
     message: "Route not defined",
   });
 };
-const deleteUser = (req, res) => {
-  res.status(500).json({
-    status: "error",
-    message: "Route not defined",
-  });
-};
+const deleteUser = factory.deleteOne(User);
 
 module.exports = {
   getAllUsers,
