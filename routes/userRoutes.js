@@ -10,22 +10,41 @@ const authController = require("../controllers/authController");
 userRouter.route("/signup").post(authController.userSignup);
 userRouter.route("/login").post(authController.userLogin);
 
+// After the following line all the defined routes will be protected using authcontroller.protect, as middleware work in sequence.
+userRouter.use(authController.protect);
+
 userRouter.get(
   "/me",
-  authController.protect,
+  // authController.protect,
   userController.getMe,
   userController.getUserById
 );
 
+userRouter.use(authController.restrictTo("admin"));
 userRouter
   .route("/")
-  .get(userController.getAllUsers)
-  .post(userController.createUser);
+  .get(
+    // authController.protect,
+    userController.getAllUsers
+  )
+  .post(
+    // authController.protect,
+    userController.createUser
+  );
 
 userRouter
   .route("/:id")
-  .get(userController.getUserById)
-  .patch(userController.updateUser)
-  .delete(userController.deleteUser);
+  .get(
+    // authController.protect,
+    userController.getUserById
+  )
+  .patch(
+    // authController.protect,
+    userController.updateUser
+  )
+  .delete(
+    // authController.protect,
+    userController.deleteUser
+  );
 
 module.exports = userRouter;

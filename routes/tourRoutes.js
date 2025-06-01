@@ -14,8 +14,12 @@ tourRouter.param("id", (req, res, next, val) => {
 
 tourRouter
   .route("/")
-  .get(authController.protect, tourController.getAllTours)
-  .post(tourController.createTour);
+  .get(tourController.getAllTours)
+  .post(
+    authController.protect,
+    authController.restrictTo("admin", "lead-guide"),
+    tourController.createTour
+  );
 
 // Same piece of code is defined in routeController as well, hence duplicate code is not required.
 // tourRouter
@@ -28,12 +32,12 @@ tourRouter.route("/tour-stats").get(tourController.getTourStats);
 
 tourRouter
   .route("/:id")
-  .get(
+  .get(tourController.getTourById)
+  .patch(
     authController.protect,
-    authController.restrictTo("admin"),
-    tourController.getTourById
+    authController.restrictTo("admin", "lead-guide"),
+    tourController.updateTour
   )
-  .patch(tourController.updateTour)
   .delete(
     authController.protect,
     authController.restrictTo("admin"),
