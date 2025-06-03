@@ -397,6 +397,35 @@ const reviewRouter = express.Router({
 });
 ```
 
+# Error Handling
+
+By passing 4 params in a middleware, express considers it as a error handling middleware.
+
+```
+app.use((err, req, res, next) => {
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || "error";
+  res.status(err.statusCode).json({
+    status: err.status,
+    message: err.message,
+  });
+});
+```
+
+In any middleware function if we call the function next with any parameters, express triggers the error handling middleware. The following will trigger the error handling middleware above with _err_ mapped to _err_.
+
+```
+app.all("/*splat", (req, res, next) => {
+  const err = new Error(`Can't find ${req.originalUrl} on this server`);
+  err.status = "fail";
+  err.statusCode = 404;
+
+  next(err);
+});
+```
+
+If there are multiple errorhandlers, they will be called in the order we put them in our .use statements. Every errorhandler has to do next(err) though in order to pass the error on.
+
 # Important Concepts
 
 1. Node.js, similar to javascript, executes code synchronously, line by line.

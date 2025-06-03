@@ -1,6 +1,8 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
+const { catchAsync } = require("../utils/catchAsync");
+const AppError = require("../utils/appError");
 
 const userSignup = async (req, res) => {
   try {
@@ -31,40 +33,31 @@ const userSignup = async (req, res) => {
   }
 };
 
-const userLogin = async (req, res) => {
+const userLogin = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({
-      status: "fail",
-      message: "Please provide both email and password!",
-    });
+    throw new AppError("Please provide both email and password!", 400);
+    // return res.status(400).json({
+    //   status: "fail",
+    //   message: "Please provide both email and password!",
+    // });
   }
-  try {
-    const user = await User.findOne({
-      email,
-    }).select("+password");
-    // const isValidUser = await user.correctPassword(password, user.password);
-    if (!user || !(await user.correctPassword(password, user.password))) {
-      return res.status(401).json({
-        status: "fail",
-        message: "Incorrect Email or Password!",
-      });
-    }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRE_IN,
-    });
+  const user = await User.findOne({
+    email,
+  }).select("+password");
+  // const isValidUser = await user.correctPassword(password, user.password);
+  if (!user || !(await user.correctPassword(password, user.password))) {
+    throw new AppError("Incorrect Email or Password!", 401);
+  }
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE_IN,
+  });
 
-    res.status(200).json({
-      status: "success",
-      token,
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "error",
-      message: err,
-    });
-  }
-};
+  res.status(200).json({
+    status: "success",
+    token,
+  });
+});
 
 const protect = async (req, res, next) => {
   try {

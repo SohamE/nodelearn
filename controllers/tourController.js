@@ -1,50 +1,36 @@
 const Tour = require("../models/tourModel");
+const { catchAsync } = require("../utils/catchAsync");
+const AppError = require("../utils/appError");
 const factory = require("./handlerFactory");
 
-const getAllTours = async (req, res) => {
-  try {
-    const queryObject = { ...req.query };
-    const excludeFields = ["page", "sort", "limit", "fields"];
-    excludeFields.forEach((el) => delete queryObject[el]);
-    console.log(req.query);
-    const tours = await Tour.find({ ...req.query });
-
-    res.status(200).json({
-      status: "success",
-      results: tours.length,
-      data: {
-        tours,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err,
-    });
-  }
-};
+const getAllTours = catchAsync(async (req, res, next) => {
+  const queryObject = { ...req.query };
+  const excludeFields = ["page", "sort", "limit", "fields"];
+  excludeFields.forEach((el) => delete queryObject[el]);
+  const tours = await Tour.find({ ...req.query });
+  res.status(200).json({
+    status: "success",
+    results: tours.length,
+    data: {
+      tours,
+    },
+  });
+});
 
 const getTourById = factory.getOne(Tour, "reviews");
 
-const createTour = async (req, res) => {
-  try {
-    const newTour = await Tour.create({
-      ...req.body,
-    });
+const createTour = catchAsync(async (req, res, next) => {
+  const newTour = await Tour.create({
+    ...req.body,
+  });
 
-    res.status(201).json({
-      status: "success",
-      data: {
-        tour: newTour,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err,
-    });
-  }
-};
+  res.status(201).json({
+    status: "success",
+    data: {
+      tour: newTour,
+    },
+  });
+});
 
 const updateTour = async (req, res) => {
   try {
