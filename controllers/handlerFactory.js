@@ -1,3 +1,6 @@
+const AppError = require("../utils/appError");
+const { catchAsync } = require("../utils/catchAsync");
+
 const deleteOne = (Model) => async (req, res) => {
   try {
     const deletedDoc = await Model.findOneAndDelete({ _id: req.params.id });
@@ -16,17 +19,20 @@ const deleteOne = (Model) => async (req, res) => {
   }
 };
 
-const getOne = (Model, popOptions) => async (req, res) => {
-  try {
-    let query = await Model.findOne({ _id: req.params.id });
-    if (popOptions) query = query.populate(popOptions);
-    const doc = await query;
+const getOne = (Model, popOptions) =>
+  catchAsync(async (req, res, next) => {
+    let doc = await Model.findOne({ _id: req.params.id });
+    if (!!doc && popOptions) {
+      const query = doc.populate(popOptions);
+      doc = await query;
+    }
 
     if (!doc) {
-      return res.status(404).json({
-        status: "fail",
-        message: "No document found with the id",
-      });
+      throw new AppError("No document found with the id", 404);
+      // return res.status(404).json({
+      //   status: "fail",
+      //   message: "No document found with the id",
+      // });
     }
 
     res.status(200).json({
@@ -35,14 +41,7 @@ const getOne = (Model, popOptions) => async (req, res) => {
         data: doc,
       },
     });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({
-      status: "fail",
-      message: err,
-    });
-  }
-};
+  });
 
 module.exports = {
   deleteOne,
