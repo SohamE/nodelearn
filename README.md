@@ -426,6 +426,29 @@ app.all("/*splat", (req, res, next) => {
 
 If there are multiple errorhandlers, they will be called in the order we put them in our .use statements. Every errorhandler has to do next(err) though in order to pass the error on.
 
+# Sessions
+
+use _express-session_ npm package for session handling. It is used as a middleware and we store the data in _req.session_
+
+```
+app.use(session({
+  name: "my-session",
+  ...
+}));
+
+app.use((req, res, next) => {
+  let { visit } = req.session;
+  if (!visit) {
+    visit = {
+      count: 1,
+    }
+  } else {
+    visit.count++;
+  }
+  req.session.visit = visit;
+})
+```
+
 # Important Concepts
 
 1. Node.js, similar to javascript, executes code synchronously, line by line.
@@ -477,3 +500,7 @@ c. Many to Many -> One actor plays in multiple movie and one movie can have mult
 a. Child referencing -> the parent should have all the child reference as an array.
 b. Parent referencing -> Each child will have a single field referencing to the parent. This can help keeping the parent clean, hence it's better than child referencing.
 c. Two-Way referencing ->
+
+7. To debug node files use the command `node inspect filename`. In this file breakpoints can be added similar to DOM js using _debugger_
+
+8. _helmet_ npm package helps protecting our site as a middleware.
